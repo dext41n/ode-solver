@@ -16,6 +16,10 @@ class Result:
         else:
             self.t.append(t_new)
 
+    def as_arrays(self):
+        return np.array(self.x), np.array(self.t)
+
+
 def explicit_euler(f, x0, t0, t_end, h):
 
     n_steps = int(round((t_end - t0)//h))
@@ -23,7 +27,7 @@ def explicit_euler(f, x0, t0, t_end, h):
     t_prev = t0
     sol = Result(x_prev, t_prev)
 
-    for i in range(n_steps):
+    for i in range(n_steps+1):
         x = x_prev + h*f(t_prev,x_prev)
         x_prev, t_prev = x, t_prev+h
         sol.add(x,t_prev)
