@@ -20,10 +20,10 @@ def regularization(J, fn, n, reg0 = 1e-10, max_tries = 10):
             return np.linalg.solve(J + reg*np.eye(n), -fn)
         except np.linalg.LinAlgError:
             reg *= 10
-    raise np.linalg.LinAlgError("Ani po zvýšení regularizace neřešitelná")
+    raise np.linalg.LinAlgError("Ani regularizaci neřešitelná")
 
 
-def damping(f, x, delta, norm_fn, max_tries = 20):
+def damping(f, x, delta, norm_old, max_tries = 20):
     """
     Zkracuje krok, dokud se nezlepší reziduum, opět nemusí pomoct
     """
@@ -31,8 +31,8 @@ def damping(f, x, delta, norm_fn, max_tries = 20):
     for _ in range(max_tries):
         x_new = x + alpha * delta
         fn_new = f(x_new)
-        fn_new = f(x_new)
-        if np.max(np.abs(fn_new)) < norm_fn:
+        norm_new = np.max(np.abs(fn_new))
+        if norm_new < norm_old:
             return x_new, fn_new, True
         alpha *= 0.5
 
@@ -82,6 +82,9 @@ def newton(f, x0, jac = None, maxiter = 200, tol = 1e-9, reg = 1e-10):
         x_new, fn_new, improved = damping(f, x[-1], delta, norm_fn)
         if not improved:
             return False, i, x[-1]
+        #jen test pro možnost bez dampingu
+        #x_new = x[-1] + delta
+        #fn_new = f(x_new)
 
         x.append(x_new)
         fn = fn_new
@@ -94,6 +97,7 @@ def f(x):
 
 def g(x):
     #funkce pro kterou by měl být využit damping
+    #bez dampingu diverguje
     return np.arctan(x)
 
 def test():

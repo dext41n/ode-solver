@@ -1,34 +1,25 @@
 import numpy as np
 from newton import newton
-
-
-class Result:
-
-    def __init__(self, x = None, t = None):
-        self.x = [x]
-        self.t = [t]
-
-    def add(self, x_new, t_new):
-        if self.x is None:
-            self.x = [x_new]
-        else:
-            self.x.append(x_new)
-        if self.t is None:
-            self.t = [t_new]
-        else:
-            self.t.append(t_new)
-
-    def as_arrays(self):
-        return np.array(self.x), np.array(self.t)
+from results import Result
 
 
 def implicit_step(f, x_prev, t, h):
-    t = t + h
-    g = lambda x: x_prev + h * f(t, x) - x
-    initial_guess = x_prev + h * f(t, x_prev)
-    convergence, iter, x_new = newton(g, initial_guess)
+    """udělá krok implicitního eulera"""
+    h_try = h
+    while h_try > 1e-7:
+        t_new = t + h_try
 
-    return x_new, t
+        def g(x, h_try=h_try, t_new=t_new):
+            return x_prev + h_try * f(t_new, x) - x
+
+        guess = x_prev + h_try * f(t_new, x_prev)
+        convergence, iters, x_new = newton(g, guess)
+
+        if convergence:
+            return x_new, t_new
+        h_try /= 2
+
+    raise RuntimeError(f"Newton nezkonvergoval ani při h={h_try}")
 
 
 def euler(f, x0, t0, t_end, h, implicit = False):
@@ -42,14 +33,24 @@ def euler(f, x0, t0, t_end, h, implicit = False):
     :param implicit: True použije implicitní, False explicitního eulera
     :return: objekt výsledků
     """
-    n_steps = int(round((t_end - t0)//h))
-    x_prev = x0
+    if isinstance(x0,(int,float)):
+        x_prev = np.array([x0])
+    else:
+        x_prev = x0
+    n_steps = int(round((t_end - t0)/h))
     t = t0
     sol = Result(x_prev, t)
 
     if implicit:
-        for i in range(n_steps + 1):
-            x_new, t = implicit_step(f, x_prev, t, h)
+        EPS_TIME = 1e-9 #nějaký práh relativní k typickému h
+        while t < t_end:
+            h_step = min(h, t_end - t)
+            if h_step < EPS_TIME:
+                # poslední krok je tak malý, že nemá smysl řešit nelineárně
+                x_new = x_prev + h_step * f(t, x_prev)
+                t = t + h_step
+            else:
+                x_new, t = implicit_step(f, x_prev, t, h_step)
             x_prev = x_new
             sol.add(x_new, t)
 
