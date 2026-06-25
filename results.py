@@ -58,7 +58,9 @@ class Result:
         """
         dense output pomocí hermitovy interpolace mezi uzly
         """
-        t_eval = np.atleast_1d(t_eval)
+        t0, t_end = self.t[0], self.t[-1]
+        t_eval = np.array([x for x in t_eval if t0 <= x <= t_end])          #oseknutí extrapolace
+
         t_arr = np.asarray(self.t)
         x_arr = np.asarray(self.x)  # shape (n_kroku, n_promennych)
         dx_arr = np.asarray(self.dx)

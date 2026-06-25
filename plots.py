@@ -16,4 +16,4 @@ fig, ax = plt.subplots()
 ax.plot(x)
 plt.show()
 
-print(reseni(np.linspace(0,10,100)))
+print(len(reseni(np.linspace(0,11,100))))
