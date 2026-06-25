@@ -58,7 +58,7 @@ def euler(f, x0, t0, t_end, h, implicit = False):
             sol.add(x_new, t, f(t,x_new))
 
     else:
-        for i in range(n_steps+1):
+        for i in range(n_steps):
             x = x_prev + h*f(t,x_prev)
             x_prev, t = x, t+h
             sol.add(x,t,f(t,x))

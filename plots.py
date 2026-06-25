@@ -9,11 +9,11 @@ def oscilator(t,x,omega=4, ksi=2):
 def test_rce(t,x):
     return x + np.sin(t)
 
-reseni = euler(test_rce,0, 0, 10, 0.01, implicit=False)
+reseni = euler(oscilator,np.array([1,1]), 0, 10, 0.01, implicit=True)
 x,t = reseni.as_arrays()
 
 fig, ax = plt.subplots()
 ax.plot(x)
 plt.show()
-print(reseni(2/3))
 
+print(reseni(np.linspace(0,10,100)))

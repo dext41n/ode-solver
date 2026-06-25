@@ -62,9 +62,9 @@ class Result:
         t_arr = np.asarray(self.t)
         x_arr = np.asarray(self.x)  # shape (n_kroku, n_promennych)
         dx_arr = np.asarray(self.dx)
-        #najít index intervalu
+        #najít index intervalu, indexy jsou pole, pro numpy to lze dělat vektorově
         i = search(t_arr, t_eval)
-        i = clip(i, 0, len(self.t)-2)
+        i = clip(i, 0, len(self.t)-3)
         #normování
         h = t_arr[i+1] - t_arr[i]
         s = (t_eval - t_arr[i]) / h
