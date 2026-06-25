@@ -7,13 +7,13 @@ def oscilator(t,x,omega=4, ksi=2):
     return A@x
 
 def test_rce(t,x):
-    return -15*x + np.sin(t)
+    return x + np.sin(t)
 
-reseni = euler(test_rce,0, 0, 10, 0.01, implicit=True)
+reseni = euler(test_rce,0, 0, 10, 0.01, implicit=False)
 x,t = reseni.as_arrays()
 
 fig, ax = plt.subplots()
 ax.plot(x)
 plt.show()
-
+print(reseni(2/3))
 

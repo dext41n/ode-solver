@@ -4,9 +4,12 @@ from results import Result
 
 
 def implicit_step(f, x_prev, t, h):
-    """udělá krok implicitního eulera"""
+    """
+    udělá krok implicitního eulera
+    zkusí jestli newton diverguje, zkusí to s menším krokem
+    """
     h_try = h
-    while h_try > 1e-7:
+    while h_try > 1e-9:
         t_new = t + h_try
 
         def g(x, h_try=h_try, t_new=t_new):
@@ -42,22 +45,22 @@ def euler(f, x0, t0, t_end, h, implicit = False):
     sol = Result(x_prev, t)
 
     if implicit:
-        EPS_TIME = 1e-9 #nějaký práh relativní k typickému h
+        time_eps = 1e-9 #nějaký práh relativní k typickému h
         while t < t_end:
             h_step = min(h, t_end - t)
-            if h_step < EPS_TIME:
+            if h_step < time_eps:
                 # poslední krok je tak malý, že nemá smysl řešit nelineárně
                 x_new = x_prev + h_step * f(t, x_prev)
                 t = t + h_step
             else:
                 x_new, t = implicit_step(f, x_prev, t, h_step)
             x_prev = x_new
-            sol.add(x_new, t)
+            sol.add(x_new, t, f(t,x_new))
 
     else:
         for i in range(n_steps+1):
             x = x_prev + h*f(t,x_prev)
             x_prev, t = x, t+h
-            sol.add(x,t)
+            sol.add(x,t,f(t,x))
     return sol
 
