@@ -42,10 +42,10 @@ def euler(f, x0, t0, t_end, h, implicit = False):
         x_prev = x0
     n_steps = int(round((t_end - t0)/h))
     t = t0
-    sol = Result(x_prev, t)
+    sol = Result(x_prev, t, f(t,x_prev))
 
     if implicit:
-        time_eps = 1e-9 #nějaký práh relativní k typickému h
+        time_eps = 1e-8 #nějaký práh relativní k typickému h
         while t < t_end:
             h_step = min(h, t_end - t)
             if h_step < time_eps:
