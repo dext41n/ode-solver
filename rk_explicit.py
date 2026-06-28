@@ -35,17 +35,20 @@ def count_coeficients(f, x, t, h, c, A, k1):
     return k
 
 
-def rk45_step(f, x, t, h, k1, c, A, b_4, b_5):
+def rk45_step(f, x, t, h, k1, c, A, b_4, b_5, adaptive):
     """
     c je levý sloupec koeficentů z butcherovy tabulky, A je hlavní část tabulky a b_4 resp. b_5
     jsou vektory pro finální lin, kombinaci. k1 je první koeficient
     """
     k = count_coeficients(f,x,t,h,c,A,k1)
     x_new = x + h*(b_5@k)
-    x_hat = x + h*(b_4@k)
-    error = x_new - x_hat
     k7 = k[-1]
-    return x_new, error, k7
+    if adaptive:
+        x_hat = x + h*(b_4@k)
+        error = x_new - x_hat
+        return x_new, error, k7
+    else:
+        return x_new, k7
 
 
 def adaptive_step(error, atol, rtol, x, x_new, h, safety, max_step, fmin=0.1, fmax=10, p=4):
@@ -101,7 +104,7 @@ def first_step(f, x0, t0, atol, rtol, p=4):
 
 
 
-def rk45_explicit(f, x0, t0, t_end, max_step = None, atol = 1e-6, rtol = 1e-3, min_step = 1e-12):
+def rk45_explicit(f, x0, t0, t_end, max_step = None,  adaptive = True, atol = 1e-6, rtol = 1e-3, min_step = 1e-12):
     """
     Řeší diferenciílní rovnici x' = f(t,x) numericky metodou Runge-Kutta 45, s adaptivním krokem.
     :param f: funkce pravé strany, klidně soustava
@@ -117,32 +120,40 @@ def rk45_explicit(f, x0, t0, t_end, max_step = None, atol = 1e-6, rtol = 1e-3, m
         x = np.array([x0])
     else:
         x = x0
-    step_1 = first_step(f, x0, t0, atol, rtol, p=4)
-    step = min(max_step, step_1) if max_step is not None else step_1
+    if adaptive:
+        step_1 = first_step(f, x0, t0, atol, rtol, p=4)
+        step = min(max_step, step_1) if max_step is not None else step_1
+    else:
+        step = max_step
     t = t0
     A, c, b_4, b_5 = rk45_params()
     k1 = f(t,x)
     sol = Result(x,t,k1)
 
     while t < t_end:
-        while True:
-            h = min(step, t_end - t)
-            x_new, error, k7 = rk45_step(f, x, t, h, k1, c, A, b_4, b_5)
-            h_new, e = adaptive_step(error, atol, rtol, x, x_new, h, safety, max_step)
+        if adaptive:
+            while True:
+                h = min(step, t_end - t)
+                x_new, error, k7 = rk45_step(f, x, t, h, k1, c, A, b_4, b_5, True)
+                h_new, e = adaptive_step(error, atol, rtol, x, x_new, h, safety, max_step)
 
-            if e <= 1:
-                break  # normální přijetí, žádná zpráva
-            if h < min_step:
-                print(f"Použit min. krok na t = {t}, chyba e: {e}")
-                break
-            step = h_new
+                if e <= 1:
+                    break  # normální přijetí, žádná zpráva
+                if h < min_step:
+                    print(f"Použit min. krok na t = {t}, chyba e: {e}")
+                    break
+                step = h_new
+        else:
+            h = step
+            x_new, k7 = rk45_step(f, x, t, h, k1, c, A, b_4, b_5, False)
 
         #krok přijat
         t = t + h
         x = x_new
         k1 = k7
         sol.add(x, t, k1)
-        step = h_new
+        if adaptive:
+            step = h_new
 
     return sol
         

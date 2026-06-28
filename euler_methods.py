@@ -14,7 +14,7 @@ def implicit_step(f, x_prev, t, h):
 
         def g(x, h_try=h_try, t_new=t_new):
             return x_prev + h_try * f(t_new, x) - x
-
+        #x0 pro newtona odhadnu klasicky pomocí explicitního eulera
         guess = x_prev + h_try * f(t_new, x_prev)
         convergence, iters, x_new = newton(g, guess)
 
