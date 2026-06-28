@@ -76,6 +76,7 @@ def radau(f, x0, t0, t_end, h):
             #udělá poslední super malý krok eulerem
             x_new = x + step * f(t, x)
             t = t + step
+
         else:
             x_new, K_new, h_try = radau_step(f, x, t, step, A, c, b, K_prev=K_new)
             t = t + h_try

@@ -115,6 +115,7 @@ def rk45_explicit(f, x0, t0, t_end, max_step = None,  adaptive = True, atol = 1e
     :return: objekt výsledků
     """
     safety = 0.8
+    time_eps = 1e-9
 
     if isinstance(x0,(int,float)):
         x = np.array([x0])
@@ -131,6 +132,7 @@ def rk45_explicit(f, x0, t0, t_end, max_step = None,  adaptive = True, atol = 1e
     sol = Result(x,t,k1)
 
     while t < t_end:
+
         if adaptive:
             while True:
                 h = min(step, t_end - t)

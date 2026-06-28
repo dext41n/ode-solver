@@ -40,6 +40,12 @@ def test_rk_implicit():
 
     fig, ax = plt.subplots()
     ax.plot(t, x)
+
+    t_array = np.linspace(0, 10, 1000)
+    x_plot = reseni(t_array)
+
+    fig, ax = plt.subplots()
+    ax.plot(t_array, x_plot)
     plt.show()
     print("len(reseni.t):", len(reseni.t))
 
