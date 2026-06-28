@@ -2,6 +2,7 @@ import numpy as np
 from newton import newton
 from results import Result
 
+
 def butcher_radau():
     """koeficenty butcherovy tabulk, našel jsem někde na netu, odvození přes kvadraturu"""
     c = np.array([
