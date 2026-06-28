@@ -29,8 +29,13 @@ def clip(a, start, end):
 class Result:
     """
     Třída pro výsledky, pro lepší manipulaci a pak vykreslování.
-    Lze volat dense output hodnotu Result(t_eval), takhle lze mít
-    interpolovaný výsledek v každém čase na řešeném intervalu.
+
+    Uchovává posloupnost (t, x, dx) z numerické integrace a umožňuje
+    dense output přes Hermitovu interpolaci voláním Result(t_eval).
+
+    :ivar x: list hodnot stavu v jednotlivých uzlech
+    :ivar t: list časů uzlů
+    :ivar dx: list derivací f(t,x) v jednotlivých uzlech
     """
     def __init__(self, x = None, t = None, dx = None):
         if x is None:

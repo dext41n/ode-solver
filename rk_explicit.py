@@ -111,8 +111,12 @@ def rk45_explicit(f, x0, t0, t_end, max_step = None,  adaptive = True, atol = 1e
     :param x0: počáteční podmínka
     :param t0: počáteční čas
     :param t_end: konec intervalu času řešení
-    :param max_step: maximální krok metody
-    :return: objekt výsledků
+    :param max_step: maximální krok metody, není nutný vyplňovat
+    :param rtol: relativní tolerance
+    :param atol: absolutní tolerance
+    :param adaptive: True/False jestli chceš použít adaptivní krok
+    :param min_step: min. povolený step pro adaptivní krok, asi není nutný skoro nikdy měnit
+    :return: objekt Result
     """
     safety = 0.8
     time_eps = 1e-9

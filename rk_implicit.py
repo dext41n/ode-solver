@@ -26,6 +26,7 @@ def butcher_radau():
 
 
 def count_coefs(K, f, x, t, h, A, c):
+    """vypočítá k a pak z toho sestrojí rovnici řešitelnou newtonem"""
     n = len(x)
     k_num = len(c)
     k = K.reshape(k_num,n)              #abych to zapsal elegantně jak v explicitním
@@ -38,6 +39,18 @@ def count_coefs(K, f, x, t, h, A, c):
 
 
 def radau_step(f, x, t, h, A, c, b, K_prev=None):
+    """
+    Spočítá jeden krok radau metody.
+    :param f: callable funkce
+    :param x: současný bod
+    :param t: současný čas
+    :param h: délka kroku
+    :param A: matice A z Butcherovy tabulky
+    :param c: vektor c z Butcherovy tabulky
+    :param b: vektor b z Butcherovy tabulky
+    :param K_prev: vektor K z minulého kroku, použitý jako odhad pro newtona
+    :return: nový x, nový K, použitý krok
+    """
     n = len(x)
     h_try = h
     if K_prev is None:
@@ -60,10 +73,17 @@ def radau_step(f, x, t, h, A, c, b, K_prev=None):
 
 
 def radau(f, x0, t0, t_end, h):
-
+    """
+    Řeší rovnici implicitní runge kutta metodou, Radau IIA
+    :param f: callable
+    :param x0: počáteční podmínka
+    :param t0: počátenčí čas
+    :param t_end: koncový čas
+    :param h: délka kroku, tu je povinná
+    :return: objekt Results
+    """
     time_eps = 1e-9
     x0 = np.atleast_1d(x0)
-    n = len(x0)
     x = x0
     t = t0
     sol = Result(x0,t,f(t,x0))
