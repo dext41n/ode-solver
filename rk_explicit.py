@@ -111,7 +111,7 @@ def rk45_explicit(f, x0, t0, t_end, max_step = None, atol = 1e-6, rtol = 1e-3, m
     :param max_step: maximální krok metody
     :return: objekt výsledků
     """
-    safety = 0.9
+    safety = 0.8
 
     if isinstance(x0,(int,float)):
         x = np.array([x0])
