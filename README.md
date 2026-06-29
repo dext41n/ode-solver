@@ -1,6 +1,7 @@
 # Ordinary differential equation solver
 Řeší diferenciální rovnice a vykreslí graf řešení. V souboru comparison
-lze zhlédnout porovnání výsledků a chyb různých použitých metod.
+lze zhlédnout porovnání výsledků a chyb různých použitých metod. Všechny metody
+jsou integrovány do solve_ode do funkce solve_ivp (initial value problem)
 
 Metody: implicitní/explicitní eulerova metoda a Runge-Kutta metody - RK45
 explicitní s adaptivním krokem a Radau implicitní metoda s pevným krokem.
