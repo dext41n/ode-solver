@@ -57,14 +57,19 @@ class Result:
         self.dx.append(dx)
 
     def as_arrays(self):
+        """
+        Převede Result na array
+        :return: vrací x, t
+        """
         return np.array(self.x), np.array(self.t)
 
     def __call__(self, t_eval):
         """
         dense output pomocí hermitovy interpolace mezi uzly
         """
+        eps = 1e-8              #nutný kvůli floating point arithmetics
         t0, t_end = self.t[0], self.t[-1]
-        t_eval = np.array([x for x in t_eval if t0 <= x <= t_end])          #oseknutí extrapolace
+        t_eval = np.array([x for x in t_eval if t0 <= x <= t_end + eps])          #oseknutí extrapolace
 
         t_arr = np.asarray(self.t)
         x_arr = np.asarray(self.x)  # shape (n_kroku, n_promennych)

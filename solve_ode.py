@@ -12,7 +12,7 @@ def davinci(t, x):
     plt.show()
 
 
-def solve_ivp(f, x0, t0, t_end, method='RK45', graph = True ,h=None, max_step=None, atol=1e-6, rtol=1e-3, adaptive = True, min_step = 1e-12):
+def solve_ivp(f, x0, t0, t_end, method='RK45', graph = False ,h=None, max_step=None, atol=1e-6, rtol=1e-3, adaptive = True, min_step = 1e-12):
     """
     Funkce pro řešení rovnice x' = f(t,x) spolu s počáteční podmínkou x(t0) = x0.
     :param f: funkce callable
