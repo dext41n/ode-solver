@@ -123,9 +123,12 @@ def stiff_problem():
 def A_stability():
     """Při moc velkém kroku Euler úplně exploduje, řešení je naprosto špatně"""
     exp_sol = solve_ivp(oscilator_v2, np.array([1,1]), 0, 10,method= "Euler", h =0.1)
+    imp_sol = solve_ivp(oscilator_v2, np.array([1,1]), 0, 10,method= "ImplicitEuler", h =0.1)
     x1, t1 = exp_sol.as_arrays()
+    x2, t2 = imp_sol.as_arrays()
     fig, ax = plt.subplots()
     ax.plot(t1, x1, label="exp euler")
+    ax.plot(t2, x2, label="imp euler")
     ax.set_xlabel("t")
     ax.set_ylabel("x")
     ax.legend()

@@ -28,5 +28,16 @@ využívá jen hodnot uzlů, a první derivace a pracuje po částech a je spoji
 Normální kubický spline vyžaduje řešení další soustavy pro koeficienty, tak
 jsem radši použil Hermitovu.
 
-Obecně by implicitní metody měli mít lepší stabilitu řešení a měli by být
+Obecně by implicitní metody měli mít lepší A-stabilitu řešení a měli by být
 zejména lepší v řešení stiff problémů, což je ukázáno v comparison.
+
+Comparison - Na prvním grafu lze vidět, jak se mění chyba při změně kroku metody
+a rozdíl mezi přesností Eulerovy metody při hodně málem kroku a RK45 metody při
+ kroku velikosti 1 na rovnici s jednoduýchým řešením.
+Druhý příklad ukazuje, že řešení explicitním eulerem zvyšuje zachovávanou energii
+a naopak řešení implicitním ji snižuje, zatímco obě Runge-Kutta metody si s tím
+poradili obstojně a zachovávají energii.
+Třetí graf ukazuje rozdíl mezi implicitní metodou při řešení stiff problémů. Obě
+mají stejný krok a do třetice jsem tam dal pro porovnání ještě Radau.
+Na čtvrtý příklad jsem přišel při testování eulera. Explictiní euler je pro tento
+krok A-nestabilní, ale implicitní je stabilní. Explicitní exploduje bůhvíkam.
