@@ -3,6 +3,7 @@ import numpy as np
 from euler_methods import euler
 from rk_explicit import rk45_explicit
 from rk_implicit import radau
+from solve_ode import solve_ivp
 
 def oscilator(t,x,omega=4, ksi=0.1):
     A = np.array([[0, 1], [-omega**2, -2*ksi*omega]])
@@ -49,6 +50,13 @@ def test_rk_implicit():
     plt.show()
     print("len(reseni.t):", len(reseni.t))
 
+
+def test_solve_ode():
+    reseni = solve_ivp(oscilator, np.array([1,1]), 0, 10, method="RK45", adaptive = False, max_step=0.01)
+
+test_solve_ode()
+"""
 test_euler()
 test_rk_expl()
 test_rk_implicit()
+"""

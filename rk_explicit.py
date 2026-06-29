@@ -129,7 +129,10 @@ def rk45_explicit(f, x0, t0, t_end, max_step = None,  adaptive = True, atol = 1e
         step_1 = first_step(f, x0, t0, atol, rtol, p=4)
         step = min(max_step, step_1) if max_step is not None else step_1
     else:
-        step = max_step
+        if isinstance(max_step,(int,float)):
+            step = max_step
+        else:
+            raise ValueError("Není správně, nebo vůbec zadán max_step")
     t = t0
     A, c, b_4, b_5 = rk45_params()
     k1 = f(t,x)
