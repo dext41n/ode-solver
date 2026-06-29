@@ -52,7 +52,7 @@ def test_rk_implicit():
 
 
 def test_solve_ode():
-    reseni = solve_ivp(oscilator, np.array([1,1]), 0, 10, method="RK45", adaptive = False, max_step=0.01)
+    reseni = solve_ivp(test_rce, 0, 0, 10, method="RK45")
 
 test_solve_ode()
 """

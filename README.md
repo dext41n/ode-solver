@@ -11,7 +11,8 @@ krok. Obě RK metody jsou pátého řádu, konvergují o dost líp než euler.
 Radau není implementovaná úplně super efektivně neboť obsahuje řešení nelineární
 soustav 3n proměnných, což prý se dá udělat nějakou chytrou transformací
 pro velké n efektivněji. Obě metody jsou implementovány pomocí Butcherovy
-tabulky, což je elegantní způsob zápisu.
+tabulky, což je elegantní způsob zápisu. Teorie je částečně i na wikipedii 
+https://en.wikipedia.org/wiki/Runge%E2%80%93Kutta_methods#Adaptive_Runge%E2%80%93Kutta_methods
 
 Program obsahuje i vlastní implementaci Newtonovi metody pro řešení nelineární
 soustavy rovnic. Ta je obohacena ještě o LM metodu regularizace matice, což
