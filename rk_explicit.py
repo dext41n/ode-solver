@@ -140,6 +140,19 @@ def rk45_explicit(f, x0, t0, t_end, max_step = None,  adaptive = True, atol = 1e
     :param min_step: min. povolený step pro adaptivní krok, asi není nutný skoro nikdy měnit
     :return: objekt Result
     """
+
+    if t_end < t0:
+        raise ValueError(f"t_end ({t_end}) musí být >= t0 ({t0})")
+
+    if max_step is not None and (not isinstance(max_step, (int, float)) or max_step <= 0):
+        raise ValueError(f"max_step musí být kladné číslo, dostal jsem max_step={max_step!r}")
+
+    if atol <= 0 or rtol <= 0:
+        raise ValueError(f"atol i rtol musí být kladné (atol={atol}, rtol={rtol})")
+
+    if min_step <= 0:
+        raise ValueError(f"min_step musí být kladné číslo, dostal jsem min_step={min_step!r}")
+
     safety = 0.8
     time_eps = 1e-9
 

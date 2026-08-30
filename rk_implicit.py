@@ -97,6 +97,13 @@ def radau(f, x0, t0, t_end, h):
     :param h: délka kroku, tu je povinná
     :return: objekt Results
     """
+
+    if h is None or not isinstance(h, (int, float)) or h <= 0:
+        raise ValueError(f"h musí být kladné číslo, dostal jsem h={h!r}")
+
+    if t_end < t0:
+        raise ValueError(f"t_end ({t_end}) musí být >= t0 ({t0})")
+
     time_eps = 1e-9
     x0 = np.atleast_1d(x0)
     x = x0

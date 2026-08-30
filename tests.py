@@ -55,7 +55,7 @@ def test_rk_implicit():
     ax.plot(t_array, x_plot)
     plt.show()
     print("len(reseni.t):", len(reseni.t))
-    print(reseni(4.15))
+    print(reseni(11))
 
 
 def test_solve_ode():

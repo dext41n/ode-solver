@@ -42,6 +42,12 @@ def euler(f, x0, t0, t_end, h, implicit = False):
     :param implicit: True použije implicitní, False explicitního eulera
     :return: objekt výsledků
     """
+
+    if h is None or not isinstance(h, (int, float)) or h <= 0:
+        raise ValueError(f"h musí být kladné číslo, dostal jsem h={h!r}")
+    if t_end < t0:
+        raise ValueError(f"t_end ({t_end}) musí být >= t0 ({t0})")
+
     if isinstance(x0,(int,float)):
         x_prev = np.array([x0])
     else:

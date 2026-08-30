@@ -104,6 +104,13 @@ class Result:
         t_eval = np.atleast_1d(t_eval)
         t_eval = t_eval[(t_eval >= t0) & (t_eval <= t_end + eps)]        #oseknutí extrapolace
 
+        if t_eval.size == 0:
+            if scalar:
+                raise ValueError(
+                    f"Zadaný čas je mimo interval integrace [{t0}, {t_end}]"
+                )
+            return np.array([])
+
         t_arr = np.asarray(self.t)
         x_arr = np.asarray(self.x)  # shape (n_kroku, n_promennych)
         dx_arr = np.asarray(self.dx)
