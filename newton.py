@@ -13,19 +13,20 @@ def jacobi(f,x,n):
 
 
 def regularization(J, fn, n, reg0 = 1e-10, max_tries = 10):
-    """zkusí vyřešit soustavu pro regularizovanou matici, může pomoct konvrgenci"""
+    """zkusí vyřešit soustavu pro regularizovanou matici, může pomoct konvergenci"""
     reg = reg0
     for _ in range(max_tries):
         try:
             return np.linalg.solve(J + reg*np.eye(n), -fn)
         except np.linalg.LinAlgError:
             reg *= 10
-    raise np.linalg.LinAlgError("Ani regularizaci neřešitelná")
+    raise np.linalg.LinAlgError("Stále po regularizaci neřešitelná")
 
 
 def damping(f, x, delta, norm_old, max_tries = 20):
     """
     Zkracuje krok, dokud se nezlepší reziduum, opět nemusí pomoct
+    :return další x, f(x) a informaci jestli se to zlepšilo
     """
     alpha = 1
     for _ in range(max_tries):

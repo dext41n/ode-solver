@@ -91,7 +91,7 @@ def energy():
     ax.plot(t_ie,x_ie[:,0], label = "imp euler")
     ax.set_xlabel("t")
     ax.set_ylabel("x")
-    ax.set_title("Preservation of energy")
+    ax.set_title("Zachování energie")
     ax.legend()
     plt.show()
 
@@ -114,6 +114,7 @@ def stiff_problem():
     ax.plot(t2, x2, label = "imp euler")
     ax.plot(t3, x3, label = "radau")
     ax.plot(t_eval, exact_x, label = "exact solulu")
+    ax.set_title("Explicitní vs. implicitní")
     ax.set_xlabel("t")
     ax.set_ylabel("x")
     ax.legend()
@@ -131,6 +132,7 @@ def A_stability():
     ax.plot(t2, x2, label="imp euler")
     ax.set_xlabel("t")
     ax.set_ylabel("x")
+    ax.set_title("A-stabilita")
     ax.legend()
     plt.show()
 

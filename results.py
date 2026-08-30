@@ -52,6 +52,7 @@ class Result:
             self.dx = [dx]
 
     def add(self, x_new, t_new, dx):
+        """přidá prvek, tedy trojici x, t, derivace"""
         self.x.append(x_new)
         self.t.append(t_new)
         self.dx.append(dx)
@@ -67,9 +68,11 @@ class Result:
         """
         dense output pomocí hermitovy interpolace mezi uzly
         """
-        eps = 1e-8              #nutný kvůli floating point arithmetics
+        eps = 1e-8                                                      #kvůli fpa
         t0, t_end = self.t[0], self.t[-1]
-        t_eval = np.array([x for x in t_eval if t0 <= x <= t_end + eps])          #oseknutí extrapolace
+        scalar = np.isscalar(t_eval) or np.ndim(t_eval) == 0                #ověření skaláru
+        t_eval = np.atleast_1d(t_eval)
+        t_eval = t_eval[(t_eval >= t0) & (t_eval <= t_end + eps)]        #oseknutí extrapolace
 
         t_arr = np.asarray(self.t)
         x_arr = np.asarray(self.x)  # shape (n_kroku, n_promennych)
@@ -87,7 +90,6 @@ class Result:
         h11 = s ** 3 - s ** 2
         value = (h00[:, None]*x_arr[i] + h10[:, None]*h[:, None]*dx_arr[i]
                 + h01[:, None]*x_arr[i+1] + h11[:, None]*h[:, None]*dx_arr[i+1])
-        scalar = np.isscalar(t_eval) or np.ndim(t_eval) == 0
         if scalar:
             return value[0]
         return value

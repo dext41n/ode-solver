@@ -21,7 +21,7 @@ def rk45_params():
 
 def count_coeficients(f, x, t, h, c, A, k1):
     """spočítá koeficienty k2 až k7 pro jeden krok rk45, k1 = k7 předešlý
-    k je matice co má v řádcích prvky k1 až k7
+    k je matice co má v řádcích prvky k1 až k7, viz wikipedie této metody
     """
     n = len(x)
     k_num = len(c)
@@ -132,7 +132,7 @@ def rk45_explicit(f, x0, t0, t_end, max_step = None,  adaptive = True, atol = 1e
         if isinstance(max_step,(int,float)):
             step = max_step
         else:
-            raise ValueError("Není správně, nebo vůbec zadán max_step")
+            raise ValueError("Není správně, nebo vůbec není zadán max_step")
     t = t0
     A, c, b_4, b_5 = rk45_params()
     k1 = f(t,x)
