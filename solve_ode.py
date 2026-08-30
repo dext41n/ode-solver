@@ -5,6 +5,12 @@ from rk_explicit import rk45_explicit
 
 
 def davinci(t, x):
+    """
+    Vykreslí graf řešení x proti t.
+    :param t: pole časů
+    :param x: pole odpovídajících hodnot x
+    :return: None
+    """
     fig, ax = plt.subplots()
     ax.plot(t,x)
     ax.set_xlabel("t")

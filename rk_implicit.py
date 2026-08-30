@@ -4,7 +4,10 @@ from results import Result
 
 
 def butcher_radau():
-    """koeficenty butcherovy tabulk, našel jsem někde na netu, odvození přes kvadraturu"""
+    """
+    Butcherova tabulka pro implicitní Runge-Kuttovu metodu Radau (3 stage, řád 5).
+    :return: (A, c, b) -- matice A, uzly c a váhy b metody
+    """
     c = np.array([
         (4 - np.sqrt(6)) / 10,
         (4 + np.sqrt(6)) / 10,
@@ -27,7 +30,18 @@ def butcher_radau():
 
 
 def count_coefs(K, f, x, t, h, A, c):
-    """vypočítá k a pak z toho sestrojí rovnici řešitelnou newtonem"""
+    """
+    Sestaví reziduální soustavu G(K) = 0 pro implicitní stage koeficienty K
+    (3n neznámých), kterou pak řeší newton().
+    :param K: zploštělý vektor stage koeficientů k1..k3, délka 3n
+    :param f: funkce pravé strany, callable f(t, x)
+    :param x: hodnota x na začátku kroku
+    :param t: čas na začátku kroku
+    :param h: délka kroku
+    :param A: matice z Butcherovy tabulky
+    :param c: uzly z Butcherovy tabulky
+    :return: zploštělý vektor rezidua G, délka 3n
+    """
     n = len(x)
     k_num = len(c)
     k = K.reshape(k_num,n)              #abych to zapsal elegantně jak v explicitním

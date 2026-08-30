@@ -5,8 +5,14 @@ from results import Result
 
 def implicit_step(f, x_prev, t, h):
     """
-    udělá krok implicitního eulera
-    zkusí jestli newton diverguje, zkusí to s menším krokem
+    Udělá jeden krok implicitního (zpětného) Eulera: řeší x_new = x_prev + h*f(t+h, x_new)
+    Newtonovou metodou. Pokud Newton nezkonverguje, zkusí to s poloviční délkou kroku.
+    :param f: funkce pravé strany, callable f(t, x)
+    :param x_prev: hodnota x na začátku kroku
+    :param t: čas na začátku kroku
+    :param h: požadovaná délka kroku
+    :return: (nová hodnota x, nový čas t + použitý krok)
+    :raises RuntimeError: pokud Newton nezkonverguje ani po opakovaném půlení kroku
     """
     h_try = h
     while h_try > 1e-9:

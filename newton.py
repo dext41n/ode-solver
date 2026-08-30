@@ -2,7 +2,13 @@ import numpy as np
 
 
 def jacobi(f,x,n):
-    """aproximuje jacobian konečnýma diferencema"""
+    """
+    Aproximuje Jacobiho matici funkce f v bodě x centrálními diferencemi (lepší přesnost než jen na jednu stranu).
+    :param f: callable, funkce Rn -> Rn
+    :param x: bod, ve kterém se Jacobiho matice počítá
+    :param n: dimenze Rn
+    :return: aproximovaná Jacobiho matice, tvar (n, n)
+    """
     J = np.zeros((n, n))
     h = 1e-8
     for i in range(n):
@@ -13,7 +19,17 @@ def jacobi(f,x,n):
 
 
 def regularization(J, fn, n, reg0 = 1e-10, max_tries = 10):
-    """zkusí vyřešit soustavu pro regularizovanou matici, může pomoct konvergenci"""
+    """
+    Zkusí vyřešit soustavu J@delta = -fn pro regularizovanou matici (J + reg*I),
+    pokud je J singulární. Regularizační faktor se při neúspěchu vždy desetkrát zvětší.
+    :param J: (singulární) Jacobiho matice
+    :param fn: hodnota f(x), pravá strana soustavy
+    :param n: rozměr soustavy
+    :param reg0: počáteční regularizační faktor
+    :param max_tries: maximální počet pokusů se zvětšujícím se reg
+    :return: řešení delta regularizované soustavy
+    :raises numpy.linalg.LinAlgError: pokud soustava zůstane singulární i po max_tries pokusech
+    """
     reg = reg0
     for _ in range(max_tries):
         try:
@@ -25,8 +41,13 @@ def regularization(J, fn, n, reg0 = 1e-10, max_tries = 10):
 
 def damping(f, x, delta, norm_old, max_tries = 20):
     """
-    Zkracuje krok, dokud se nezlepší reziduum, opět nemusí pomoct
-    :return další x, f(x) a informaci jestli se to zlepšilo
+    Zkracuje krok (line search s půlením), dokud se nezlepší reziduum. Nemusí pomoct.
+    :param f: callable, funkce soustavy f(x) = 0
+    :param x: současný bod
+    :param delta: navržený Newtonův krok
+    :param norm_old: norma rezidua v současném bodě, se kterou se porovnává zlepšení
+    :param max_tries: maximální počet půlení kroku
+    :return: (nový bod x, f(nový bod) nebo None při neúspěchu, bool jestli se podařilo zlepšit)
     """
     alpha = 1
     for _ in range(max_tries):

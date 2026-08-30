@@ -58,9 +58,8 @@ def test_rk_implicit():
 def test_solve_ode():
     reseni = solve_ivp(test_rce, 0, 0, 10, method="RK45", graph=True)
 
-test_solve_ode()
-"""
+#test_solve_ode()
+
 test_euler()
 test_rk_expl()
 test_rk_implicit()
-"""

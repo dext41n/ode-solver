@@ -3,7 +3,10 @@ from results import Result
 
 
 def rk45_params():
-    """jen pro zisk koeficientu, poradil pán dormand a prince"""
+    """
+    Butcherova tabulka pro Dormand-Prince RK45.
+    :return: (A, c, b_4, b_5) -- matice A, uzly c, váhy metody 4. a 5. řádu
+    """
     c = np.array([0, 1/5, 3/10, 4/5, 8/9, 1, 1])
     A = np.array([
         [0,           0,            0,           0,          0,            0,     0],
@@ -20,8 +23,17 @@ def rk45_params():
 
 
 def count_coeficients(f, x, t, h, c, A, k1):
-    """spočítá koeficienty k2 až k7 pro jeden krok rk45, k1 = k7 předešlý
-    k je matice co má v řádcích prvky k1 až k7, viz wikipedie této metody
+    """
+    Spočítá koeficienty k1 až k7 (stage hodnoty) pro jeden krok RK45.
+    Díky vlastnosti metody je k1 předaný jako k7 z předchozího kroku.
+    :param f: funkce pravé strany, callable f(t, x)
+    :param x: hodnota x na začátku kroku
+    :param t: čas na začátku kroku
+    :param h: délka kroku
+    :param c: uzly z Butcherovy tabulky
+    :param A: matice z Butcherovy tabulky
+    :param k1: první stage koeficient
+    :return: matice k s řádky k1 až k7, tvar (7, n)
     """
     n = len(x)
     k_num = len(c)
@@ -37,8 +49,9 @@ def count_coeficients(f, x, t, h, c, A, k1):
 
 def rk45_step(f, x, t, h, k1, c, A, b_4, b_5, adaptive):
     """
-    c je levý sloupec koeficentů z butcherovy tabulky, A je hlavní část tabulky a b_4 resp. b_5
-    jsou vektory pro finální lin, kombinaci. k1 je první koeficient
+    Spočítá adaptivní krok RK45 metody. Parametry korespondují s Butcherovou tabulkou na wikipedii a
+    předchozíma funkcema.
+    :return Adaptivní: x, chybu, k7, Jinak: x a k7
     """
     k = count_coeficients(f,x,t,h,c,A,k1)
     x_new = x + h*(b_5@k)
@@ -86,7 +99,16 @@ def adaptive_step(error, atol, rtol, x, x_new, h, safety, max_step, fmin=0.1, fm
 
 
 def first_step(f, x0, t0, atol, rtol, p=4):
-    """hrubý odhad prvního kroku na základě počáteční hodnoty"""
+    """
+    Hrubý odhad délky prvního kroku podle počáteční hodnoty a derivace v t0
+    :param f: funkce pravé strany, callable f(t, x)
+    :param x0: počáteční podmínka
+    :param t0: počáteční čas
+    :param atol: absolutní tolerance
+    :param rtol: relativní tolerance
+    :param p: řád metody nižšího řádu (pro odhad)
+    :return: odhad délky prvního kroku
+    """
     scale = atol + rtol*np.abs(x0)
     n = len(x0)
     d0 = 0
