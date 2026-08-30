@@ -22,6 +22,7 @@ def test_euler():
     ax.plot(t,x)
     plt.show()
     print("len(reseni.t):", len(reseni.t))
+    print(reseni(4.15))
 
 
 def test_rk_expl():
@@ -37,6 +38,7 @@ def test_rk_expl():
     ax.plot(t_array, x_plot)
     plt.show()
     print("len(reseni.t):", len(reseni.t))
+    print(reseni(4.15))
 
 
 def test_rk_implicit():
@@ -53,6 +55,7 @@ def test_rk_implicit():
     ax.plot(t_array, x_plot)
     plt.show()
     print("len(reseni.t):", len(reseni.t))
+    print(reseni(4.15))
 
 
 def test_solve_ode():
