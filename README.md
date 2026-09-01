@@ -23,9 +23,9 @@ na `[t0, t_end]` a vrací objekt `Result`.
 
 | Parametr | Popis                                             | Metoda                                                    |
 |---|---------------------------------------------------|-----------------------------------------------------------|
-| `f` | pravá strana, callable `f(t, x)`                  | všechny                                                   |
-| `x0` | počáteční podmínka (skalár nebo vektor)           | všechny                                                   |
-| `t0`, `t_end` | interval integrace                                | všechny                                                   |
+| `f` | pravá strana, callable `f(t, x)`                  | všechny (povinné)                                         |
+| `x0` | počáteční podmínka (skalár nebo vektor)           | všechny (povinné)                                                  |
+| `t0`, `t_end` | interval integrace                                | všechny (povinné)                                                  |
 | `method` | `"Euler"`, `"ImplicitEuler"`, `"RK45"`, `"Radau"` | --                                                        |
 | `h` | délka kroku                                       | `Euler`, `ImplicitEuler`, `Radau` (povinné)               |
 | `max_step` | maximální krok                                    | `RK45` (povinné, pokud `adaptive=False`, jinak jen strop) |
