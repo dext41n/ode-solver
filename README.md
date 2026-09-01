@@ -1,9 +1,7 @@
-from unittest import result
-
 # Ordinary differential equation solver
-Řeší diferenciální rovnice a vykreslí graf řešení. V souboru comparison
+Řeší diferenciální rovnice s počáteční podmíknou a vykreslí graf řešení. V souboru comparison
 lze zhlédnout porovnání výsledků a chyb různých použitých metod. Všechny metody
-jsou integrovány do solve_ode do funkce solve_ivp (initial value problem)
+jsou integrovány do funkce solve_ivp (initial value problem).
 
 ## Použití
 
