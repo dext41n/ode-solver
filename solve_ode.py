@@ -35,6 +35,8 @@ def solve_ivp(f, x0, t0, t_end, method='RK45', graph = False ,h=None, max_step=N
     :param min_step: min. krok -- pouze RK45
     :return: Result objekt
     """
+    if not callable(f):
+        raise TypeError("Funkce musí být callable ve tvaru f(x,t).")
     if method == "Euler":
         sol =  euler(f, x0, t0, t_end, h, implicit=False)
     elif method == "ImplicitEuler":
