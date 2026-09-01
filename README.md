@@ -36,7 +36,7 @@ na `[t0, t_end]` a vrací objekt `Result`.
 
 ## Objekt `Results`
 
-`solve_ivp` vrací objekt typu `Results`, ve kterém jsou uloženy výsledky.
+`solve_ivp` vrací objekt typu `Results`, ve kterém jsou uloženy výsledky, tedy trojice (x, t, dx).
 
 ### Vytvoření objektu a přidání výsledku
 
