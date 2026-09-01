@@ -15,6 +15,7 @@ def test_rce(t,x):
 
 
 def test_euler():
+    """testuje eulera a třídu results"""
     reseni = euler(oscilator,np.array([1,1]), 0, 10, 0.01, implicit=True)
     x,t = reseni.as_arrays()
 
@@ -26,6 +27,7 @@ def test_euler():
 
 
 def test_rk_expl():
+    """testuje rk45 a třídu results"""
     reseni = rk45_explicit(oscilator,np.array([1,1]),0,10, max_step=0.1, adaptive=False)
     x, t = reseni.as_arrays()
     t_array = np.linspace(0,10,1000)
@@ -42,6 +44,7 @@ def test_rk_expl():
 
 
 def test_rk_implicit():
+    """testuje radau a třídu results"""
     reseni = radau(oscilator,np.array([1,1]),0,10, h = 0.1)
     x, t = reseni.as_arrays()
 
@@ -55,10 +58,11 @@ def test_rk_implicit():
     ax.plot(t_array, x_plot)
     plt.show()
     print("len(reseni.t):", len(reseni.t))
-    print(reseni(11))
+    print(reseni(3.37))
 
 
 def test_solve_ode():
+    """test výsledku"""
     reseni = solve_ivp(test_rce, 0, 0, 10, method="RK45", graph=True)
 
 #test_solve_ode()

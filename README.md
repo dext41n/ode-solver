@@ -1,3 +1,5 @@
+from unittest import result
+
 # Ordinary differential equation solver
 Řeší diferenciální rovnice a vykreslí graf řešení. V souboru comparison
 lze zhlédnout porovnání výsledků a chyb různých použitých metod. Všechny metody
@@ -16,10 +18,10 @@ x_dense = sol(4.2)          # dense output -- hodnota v libovolném bodě interv
                              # (funguje pro skalár i pro pole časů)
 ```
 
-## API -- `solve_ivp(f, x0, t0, t_end, method='RK45', graph=False, h=None, max_step=None, atol=1e-6, rtol=1e-3, adaptive=True, min_step=1e-12)`
+## Solver -- `solve_ivp(f, x0, t0, t_end, method='RK45', graph=False, h=None, max_step=None, atol=1e-6, rtol=1e-3, adaptive=True, min_step=1e-12)`
 
 Jednotné rozhraní pro všechny metody. Řeší `x' = f(t, x)`, `x(t0) = x0`
-na `[t0, t_end]` a vrací objekt `Result`.
+na `[t0, t_end]` a v rací objekt `Result`.
 
 | Parametr | Popis | Metoda                                                    |
 |---|---|-----------------------------------------------------------|
@@ -33,6 +35,52 @@ na `[t0, t_end]` a vrací objekt `Result`.
 | `atol`, `rtol` | tolerance pro adaptivní krok | jen `RK45` s `adaptive=True`                              |
 | `min_step` | minimální povolený adaptivní krok | jen `RK45`                                                |
 | `graph` | rovnou vykreslí `x(t)` | všechny                                                   |
+
+## Objekt `Results`
+
+`solve_ivp` vrací objekt typu `Results`, ve kterém jsou uloženy výsledky.
+
+### Vytvoření objektu a přidání výsledku
+
+```python
+result = Result(x=x0, t=t0, dx=dx0)
+result.add(x_new, t_new, dx_new)
+```
+| Parametr | Popis             |
+|---|-------------------|
+| `x` | Hodnota řešení.   |
+| `t` | Časový bod.       |
+| `dx` | Hodnota derivace. |
+
+### Přístup k uloženým datům
+
+Hodnoty v krocích výpočtu jsou dostupné:
+
+| Atribut | Význam |
+|---|---|
+| `result.x` | Seznam hodnot řešení v integračních uzlech. |
+| `result.t` | Seznam časových bodů. |
+| `result.dx` | Seznam derivací v jednotlivých uzlech. |
+
+Pro převod hodnot `x` a `t` na pole NumPy slouží metoda `as_arrays()`:
+
+```python
+x, t = result.as_arrays()
+```
+
+### Dense output
+
+Objekt `Results` lze volat jako funkci a tím lze získat interpolovaná hodnota
+v jakémkoliv bodu uvnitř integračního intervalu. Jako argument lze použít rovnou
+celé pole hodnot, což vrátí interpolované hodnoty ve všech bodech.
+
+```python
+import numpy as np
+
+x_at_time = result(2.5)
+t_array = np.linspace(0,10,1000)
+x_dense = result(t_array)
+```
 
 Metody: implicitní/explicitní eulerova metoda a Runge-Kutta metody - RK45
 explicitní s adaptivním krokem a Radau implicitní metoda s pevným krokem.
@@ -75,10 +123,7 @@ krok A-nestabilní, ale implicitní je stabilní. Explicitní exploduje bůhvík
 
 ## Známá omezení
 
-- **Euler s pevným krokem nemusí trefit přesně `t_end`.** Počet kroků se počítá
-  jako `round((t_end - t0) / h)`, takže pokud `h` nedělí délku intervalu beze
-  zbytku, poslední uzel může být mírně za (nebo před) `t_end`. Implicitní varianty
-  (`ImplicitEuler`, `Radau`) tohle řeší -- poslední krok zkrátí, aby skončil přesně v `t_end`.
+
 - **Radau má velkou složitost.** Jeden krok řeší nelineární soustavu o `3*n`
   neznámých (kde `n` je rozměr `x`), protože se řeší všechny tři stage
   koeficienty najednou. Pro velké `n` je to citelně pomalejší než u Eulera.
@@ -90,5 +135,4 @@ krok A-nestabilní, ale implicitní je stabilní. Explicitní exploduje bůhvík
   uvnitř `[t0, t_end]`.
 - **Newtonova metoda v `ImplicitEuler`/`Radau` počítá Jacobián numericky**
   (centrální diference), pokud nedostane `jac`. To je robustní, ale
-  pro velké soustavy nebo časté volání (mnoho kroků) to zbytečně stojí
-  čas -- analytický/sparse Jacobián by byl výrazně rychlejší.
+ náročné na výpočet.
