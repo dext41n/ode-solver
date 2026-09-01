@@ -19,7 +19,7 @@ x_dense = sol(4.2)          # dense output -- hodnota v libovolném bodě interv
 ## Solver -- `solve_ivp(f, x0, t0, t_end, method='RK45', graph=False, h=None, max_step=None, atol=1e-6, rtol=1e-3, adaptive=True, min_step=1e-12)`
 
 Jednotné rozhraní pro všechny metody. Řeší `x' = f(t, x)`, `x(t0) = x0`
-na `[t0, t_end]` a v rací objekt `Result`.
+na `[t0, t_end]` a vrací objekt `Result`.
 
 | Parametr | Popis | Metoda                                                    |
 |---|---|-----------------------------------------------------------|
